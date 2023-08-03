@@ -9,23 +9,6 @@ PACKAGES=(aria2 git unzip wget)
 MIN_PYTHON_VERS="3.4.0"
 MAX_PYTHON_VERS="3.7.9"
 
-
-version_check () {
-	MAX_VERS=$(echo -e "$(python3 --version | cut -d' ' -f2)\n$MAX_PYTHON_VERS\n$MIN_PYTHON_VERS"\
-	| sort -V | tail -n1)
-	MIN_VERS=$(echo -e "$(python3 --version | cut -d' ' -f2)\n$MAX_PYTHON_VERS\n$MIN_PYTHON_VERS"\
-	| sort -V | head -n1)
-	if [ "$MIN_VERS" != "$MIN_PYTHON_VERS" ]; then
-		echo "Your installed python version, $(python3 --version), is too old."
-		echo "Please update to at least $MIN_PYTHON_VERS."
-		exit 1
-	elif [ "$MAX_VERS" != "$MAX_PYTHON_VERS" ]; then
-		echo "Your installed python version, $(python3 --version), is too new."
-		echo "Please install $MAX_PYTHON_VERS."
-		exit 1
-	fi
-}
-
 pip_install () {
 	if [ ! -d "./venv" ]; then
 		# Some distros have venv built into python so this isn't always needed.
@@ -47,6 +30,22 @@ pip_install () {
 	source "${BASE_DIR}/venv/bin/activate"
 	pip install --upgrade pip setuptools wheel
 	pip install -r "${BASE_DIR}/requirements.txt"
+}
+
+version_check () {
+	MAX_VERS=$(echo -e "$(python3 --version | cut -d' ' -f2)\n$MAX_PYTHON_VERS\n$MIN_PYTHON_VERS"\
+	| sort -V | tail -n1)
+	MIN_VERS=$(echo -e "$(python3 --version | cut -d' ' -f2)\n$MAX_PYTHON_VERS\n$MIN_PYTHON_VERS"\
+	| sort -V | head -n1)
+	if [ "$MIN_VERS" != "$MIN_PYTHON_VERS" ]; then
+		echo "Your installed python version, $(python3 --version), is too old."
+		echo "Please update to at least $MIN_PYTHON_VERS."
+		exit 1
+	elif [ "$MAX_VERS" != "$MAX_PYTHON_VERS" ]; then
+		echo "Your installed python version, $(python3 --version), is too new."
+		echo "Please install $MAX_PYTHON_VERS."
+		exit 1
+	fi
 }
 
 is_command() {
