@@ -13,7 +13,6 @@ apt-get update
 apt-get install python3.7
 apt-get update -y
 update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1
-/usr/bin/python3.7 1
 update-alternatives --config python3
 apt install python3-pip
 !python --version
