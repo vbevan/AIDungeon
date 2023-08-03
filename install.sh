@@ -9,28 +9,44 @@ PACKAGES=(aria2 git unzip wget)
 MIN_PYTHON_VERS="3.4.0"
 MAX_PYTHON_VERS="3.7.9"
 
-pip_install () {
-	if [ ! -d "./venv" ]; then
-		# Some distros have venv built into python so this isn't always needed.
-		if is_command 'apt-get'; then
-            apt-get update
-            apt-get install python3.7
-            apt-get update -y
-            update-alternatives --install /usr/bin/python3 python3
-            /usr/bin/python3.7 1
-            update-alternatives --config python3
-            apt install python3-pip
-            !python --version
-            !python -m pip install --upgrade --force-reinstall pip
-            pip install --upgrade pip setuptools wheel
-			apt-get install python3-venv
-		fi
-		python3 -m venv ./venv
-	fi
-	source "${BASE_DIR}/venv/bin/activate"
-	pip install --upgrade pip setuptools wheel
-	pip install -r "${BASE_DIR}/requirements.txt"
-}
+apt-get update
+apt-get install python3.7
+apt-get update -y
+update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1
+/usr/bin/python3.7 1
+update-alternatives --config python3
+apt install python3-pip
+!python --version
+!python -m pip install --upgrade --force-reinstall pip
+pip install --upgrade pip setuptools wheel
+apt-get install python3-venv
+python3 -m venv ./venv
+source "${BASE_DIR}/venv/bin/activate"
+pip install --upgrade pip setuptools wheel
+pip install -r "${BASE_DIR}/requirements.txt"
+
+# pip_install () {
+# 	if [ ! -d "./venv" ]; then
+# 		# Some distros have venv built into python so this isn't always needed.
+# 		if is_command 'apt-get'; then
+#             apt-get update
+#             apt-get install python3.7
+#             apt-get update -y
+#             update-alternatives --install /usr/bin/python3 python3
+#             /usr/bin/python3.7 1
+#             update-alternatives --config python3
+#             apt install python3-pip
+#             !python --version
+#             !python -m pip install --upgrade --force-reinstall pip
+#             pip install --upgrade pip setuptools wheel
+# 			apt-get install python3-venv
+# 		fi
+# 		python3 -m venv ./venv
+# 	fi
+# 	source "${BASE_DIR}/venv/bin/activate"
+# 	pip install --upgrade pip setuptools wheel
+# 	pip install -r "${BASE_DIR}/requirements.txt"
+# }
 
 version_check () {
 	MAX_VERS=$(echo -e "$(python3 --version | cut -d' ' -f2)\n$MAX_PYTHON_VERS\n$MIN_PYTHON_VERS"\
